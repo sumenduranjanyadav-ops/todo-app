@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>To-Do App</title>
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        input {
+            padding: 10px;
+            width: 200px;
+        }
+
+        button {
+            padding: 10px;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+
+        li {
+            margin: 10px;
+            list-style: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>To-Do List</h2>
+
+<input type="text" id="task" placeholder="Enter a task">
+<button onclick="addTask()">Add</button>
+
+<ul id="list"></ul>
+
+<script>
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+function render() {
+    let list = document.getElementById("list");
+    list.innerHTML = "";
+
+    tasks.forEach((task, index) => {
+        list.innerHTML += `
+            <li>
+                ${task}
+                <button onclick="removeTask(${index})">Delete</button>
+            </li>
+        `;
+    });
+}
+
+function addTask() {
+    let taskInput = document.getElementById("task");
+    let task = taskInput.value;
+
+    if (task.trim() === "") return;
+
+    tasks.push(task);
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+
+    taskInput.value = "";
+    render();
+}
+
+function removeTask(index) {
+    tasks.splice(index, 1);
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+    render();
+}
+
+render();
+</script>
+
+</body>
+</html>
